@@ -1,5 +1,6 @@
 package come.mytest.com;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,13 +23,17 @@ public class EncryptTest {
 		System.out.println(System.getProperty("user.dir"));
 
 		FileInputStream in = null;
+		File inFile;
+		byte[] bFile;
 		FileOutputStream out = null;
 		FileOutputStream keyfile = null;
 		String inputFile = "input.txt";
 
 		try {
 			in = new FileInputStream(inputFile);
-			out = new FileOutputStream(inputFile + "_encrypted");
+			out = new FileOutputStream("input_encrypted.txt");
+			inFile = new File(inputFile);
+			bFile = new byte[(int) inFile.length()];
 			keyfile = new FileOutputStream(inputFile+"_key");
 
 			SecretKey key = makeKey();
@@ -40,13 +45,11 @@ public class EncryptTest {
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 			cipher.init(Cipher.ENCRYPT_MODE, key);
 			
-			//warning: encrypts, but badly
-			String data = "";
-			while (in != null) {
-				data = in.toString();
-				byte[] encrypted = cipher.doFinal(data.getBytes());
-				out.write(encrypted);
-			}
+			in.read(bFile);
+			in.close();
+			
+		    byte[] encrypted = cipher.doFinal(bFile);
+		    out.write(encrypted);
 			
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
@@ -63,7 +66,8 @@ public class EncryptTest {
 		} catch (BadPaddingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
+		} 
+	finally {
 			if (in != null) {
 				in.close();
 			}
