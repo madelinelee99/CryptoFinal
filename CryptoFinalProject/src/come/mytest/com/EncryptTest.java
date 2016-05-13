@@ -101,7 +101,9 @@ public class EncryptTest {
 					keyfile.close();
 				}
 			}
-			uploadFile(inputFile + "_encrypted");
+			//uploadFile(inputFile + "_encrypted");
+			downloadFile(inputFile + "_encrypted");
+
 		}
 
 		
@@ -117,6 +119,45 @@ public class EncryptTest {
 		}
 
 		return keygen.generateKey();
+	}
+	
+	private static void downloadFile(String filename){
+		try
+		{
+			final String storageConnectionString = 
+					"DefaultEndpointsProtocol=http;" +
+							"AccountName=aitcryptography;" +
+							"AccountKey=RCplSdfiuzxV8NRVktCCSuIMBf10fYKhTDnsm4Rf7RzTlJUhz5Xp4gVFYbg8+5xBJHkstruCplAcKXg6zaoLYg==";
+
+		    // Retrieve storage account from connection-string.
+		   CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
+
+		   // Create the blob client.
+		   CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
+
+		   // Retrieve reference to a previously created container.
+		   CloudBlobContainer container = blobClient.getContainerReference("aitcryptography");
+
+		   // Loop through each blob item in the container.
+		   for (ListBlobItem blobItem : container.listBlobs()) {
+		       // If the item is a blob, not a virtual directory.
+		       if (blobItem instanceof CloudBlob) {
+		           // Download the item and save it to a file with the same name.
+		            CloudBlob blob = (CloudBlob) blobItem;
+		            File myFile = new File("/Users/madelinelee/Downloads/" + filename);
+		            if(!myFile.exists()){
+		            	myFile.createNewFile();
+		            }
+		            FileOutputStream oFile = new FileOutputStream(myFile, false);
+		            blob.download(oFile);
+		        }
+		    }
+		}
+		catch (Exception e)
+		{
+		    // Output the stack trace.
+		    e.printStackTrace();
+		}
 	}
 
 	private static void uploadFile(String filename) {
@@ -157,6 +198,7 @@ public class EncryptTest {
 		}
 
 	}
+
 
 
 }
