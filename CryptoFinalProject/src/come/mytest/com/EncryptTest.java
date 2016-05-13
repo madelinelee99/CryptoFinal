@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -18,7 +19,20 @@ import javax.crypto.SecretKey;
 
 public class EncryptTest {
 
+	private static String userFile;
+
+	public EncryptTest(String[] args) {
+		java.util.Scanner input = new Scanner(System.in);
+
+		System.out.println("Enter file name: ");
+		userFile = input.nextLine();
+		System.out.println(userFile);
+
+	}
+
 	public static void main(String[] args) throws IOException {
+		EncryptTest test = new EncryptTest(args);
+
 		System.out.println("hey");
 		System.out.println(System.getProperty("user.dir"));
 
@@ -27,7 +41,8 @@ public class EncryptTest {
 		byte[] bFile;
 		FileOutputStream out = null;
 		FileOutputStream keyfile = null;
-		String inputFile = "input.txt";
+//		String inputFile = "input.txt";
+		String inputFile = userFile;
 
 		try {
 			in = new FileInputStream(inputFile);
