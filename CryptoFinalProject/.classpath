@@ -2,5 +2,52 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/annotation-detector-3.0.4.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/applicationinsights-core-1.0.2.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/applicationinsights-web-1.0.2.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-core-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-media-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-servicebus-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-serviceruntime-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-storage-4.0.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-svc-mgmt-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-svc-mgmt-compute-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-svc-mgmt-media-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-svc-mgmt-network-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-svc-mgmt-scheduler-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-svc-mgmt-sql-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-svc-mgmt-storage-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-svc-mgmt-websites-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/azure-tracing-util-0.9.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/commons-lang3-3.4.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/commons-logging-1.1.3.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/gson-1.7.2.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/guava-18.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/httpclient-4.3.6.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/httpcore-4.3.3.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jackson-annotations-2.6.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jackson-core-2.6.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jackson-core-asl-1.9.2.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jackson-databind-2.6.0.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jackson-jaxrs-1.9.2.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jackson-mapper-asl-1.9.2.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jackson-xc-1.9.2.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/javax.inject-1.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jaxb-impl-2.2.3-1-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jaxb-impl-2.2.3-1.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jersey-client-1.13-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jersey-client-1.13.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jersey-core-1.13-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jersey-core-1.13.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jersey-json-1.13-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jersey-json-1.13.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jettison-1.1.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jjwt-0.5.1.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/jsr305-1.3.9.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/mail-1.4.5-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/madelinelee/Documents/PackageForAzureLibrariesForJava/mail-1.4.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
