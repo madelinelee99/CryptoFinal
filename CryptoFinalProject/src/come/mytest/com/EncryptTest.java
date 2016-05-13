@@ -16,7 +16,6 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SealedObject;
 import javax.crypto.SecretKey;
 
 public class EncryptTest {
@@ -45,7 +44,6 @@ public class EncryptTest {
 		byte[] bFile;
 		FileOutputStream out = null;
 		FileOutputStream keyfile = null;
-		//		String inputFile = "input.txt";
 		String[] inputFiles = userFile.split(" ");
 		
 		for(String inputFile : inputFiles){
@@ -75,19 +73,14 @@ public class EncryptTest {
 
 
 			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (NoSuchPaddingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InvalidKeyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IllegalBlockSizeException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (BadPaddingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
 			finally {
