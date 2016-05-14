@@ -56,9 +56,10 @@ public class EncryptTest {
 				keyfile = new FileOutputStream(inputFile+"_key");
 
 				SecretKey key = makeKey();
-				String keystring = Base64.getEncoder().encodeToString(key.getEncoded());
+				//byte[] keystring = Base64.getEncoder().encode(key.getEncoded());
+						//encodeToString(key.getEncoded());
 
-				System.out.println(keystring);
+				//System.out.println(keystring);
 				keyfile.write(key.getEncoded());
 
 				Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -68,7 +69,7 @@ public class EncryptTest {
 				in.close();
 
 				byte[] encrypted = cipher.doFinal(bFile);
-				out.write(encrypted);
+				out.write(Base64.getEncoder().encode(encrypted));
 
 
 
@@ -137,7 +138,7 @@ public class EncryptTest {
 		       if (blobItem instanceof CloudBlob) {
 		           // Download the item and save it to a file with the same name.
 		            CloudBlob blob = (CloudBlob) blobItem;
-		            File myFile = new File("/Users/madelinelee/Downloads/" + filename);
+		            File myFile = new File(filename);
 		            if(!myFile.exists()){
 		            	myFile.createNewFile();
 		            }
