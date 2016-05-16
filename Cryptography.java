@@ -35,7 +35,8 @@ public class Cryptography {
     private static String uploadInfo;
     private static final String UPLOAD = "U";
     private static final String DOWNLOAD = "D";
-    private static final String storageConnectionString = 
+		//Assigns String storageConnectionString to have the container and the key of Clara's azure account
+    private static final String storageConnectionString =
 					"DefaultEndpointsProtocol=http;" +
 							"AccountName=aitcryptography;" +
 							"AccountKey=RCplSdfiuzxV8NRVktCCSuIMBf10fYKhTDnsm4Rf7RzTlJUhz5Xp4gVFYbg8+5xBJHkstruCplAcKXg6zaoLYg==";
@@ -55,8 +56,8 @@ public class Cryptography {
 	public static void main(String[] args) throws IOException {
 
 
-		Cryptography test = new Cryptography(args);          
-        
+		Cryptography test = new Cryptography(args);
+
 		FileInputStream in = null;
 		File inFile;
 		File outfile;
@@ -67,7 +68,7 @@ public class Cryptography {
 		String[] inputFiles = userFile.split(" ");
 
 		if (uploadInfo.equals(UPLOAD)) {
-			
+
 			for(String inputFile : inputFiles){
 
 				try {
@@ -86,9 +87,9 @@ public class Cryptography {
 					SecureRandom random = new SecureRandom();
 			    	byte[] bytes = new byte[16];
 			    	random.nextBytes(bytes);
-			    
+
 			    	ivfile.write(bytes);
-				
+
 					IvParameterSpec ivspec = new IvParameterSpec(bytes);
 
 					Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -114,7 +115,7 @@ public class Cryptography {
 					e.printStackTrace();
 				} catch (InvalidAlgorithmParameterException e) {
 					e.printStackTrace();
-				} 
+				}
 				finally {
 					if (in != null) {
 						in.close();
@@ -137,7 +138,7 @@ public class Cryptography {
 
 		} else if (uploadInfo.equals(DOWNLOAD)) {
 			for(String inputFile : inputFiles){
-				downloadFile(inputFile + "_encrypted");	
+				downloadFile(inputFile + "_encrypted");
 				//System.out.println(inputFile);
 				try {
 					decrypt(inputFile);
@@ -175,18 +176,18 @@ public class Cryptography {
 
 		return keygen.generateKey();
 	}
-	
+
+	//Download file method, takes in String filename
 	private static void downloadFile(String filename){
 		try
 		{
-
 		    // Retrieve storage account from connection-string.
 		   CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
 
 		   // Create the blob client.
 		   CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
 
-		   // Retrieve reference to a previously created container.
+			 // Retrieve reference to container called aitcryptography on Clara's azure account.
 		   CloudBlobContainer container = blobClient.getContainerReference("aitcryptography");
 
 		   // Loop through each blob item in the container.
@@ -200,7 +201,7 @@ public class Cryptography {
 		            	myFile.createNewFile();
 		            }
 		            FileOutputStream oFile = new FileOutputStream(myFile, false);
-		            blob.download(oFile);		       
+		            blob.download(oFile);
 		        }
 		    }
 		}
@@ -211,26 +212,27 @@ public class Cryptography {
 		}
 	}
 
+	//Method to upload a file taking in String filename
 	private static void uploadFile(String filename) {
 
 		try
 		{
 
-			// Retrieve storage account from connection-string.
+			// Retrieve storage account from connection-string by parsing the String.
 			CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
 
 			// Create the blob client.
 			CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
 
-			// Retrieve reference to a previously created container.
+			// Retrieve reference to container called aitcryptography on Clara's azure account.
 			CloudBlobContainer container = blobClient.getContainerReference("aitcryptography");
 			container.createIfNotExists();
 
 			// Define the path to a local file.
 			final String filePath = System.getProperty("user.dir")+ "/" + filename;
 
-
-			// Create or overwrite the "myimage.jpg" blob with contents from a local file.
+			// Create or overwrite the "myimage.jpg" blob with contents from filename.
+			//Use FileInputStream to upload filePath to blob.
 			CloudBlockBlob blob = container.getBlockBlobReference(filename);
 			File source = new File(filePath);
 			blob.upload(new FileInputStream(source), source.length());
@@ -244,29 +246,29 @@ public class Cryptography {
 
 	}
 
-	private static void decrypt(String filename) throws IOException, 
-	NoSuchAlgorithmException, NoSuchPaddingException, 
-	InvalidKeyException, IllegalBlockSizeException, 
+	private static void decrypt(String filename) throws IOException,
+	NoSuchAlgorithmException, NoSuchPaddingException,
+	InvalidKeyException, IllegalBlockSizeException,
 	BadPaddingException, InvalidAlgorithmParameterException {
 		// Input streams for the encrypted file and key
 		FileInputStream in = null;
 		FileInputStream keyFileIn = null;
 		FileInputStream ivfilein = null;
-		
+
 		// Destination file for encrypted file and key
 		File inFile;
 		File inKey;
 		File inIv;
 		File outfile;
-		
+
 		// bFile to hold bytes for encrypted file
 		byte[] bFile;
 		byte[] bKey;
 		byte[] bIv;
-		
+
 		// Output stream to stream the decrypted file into a file
 		FileOutputStream out = null;
-		
+
 		// Initialize
 		inFile = new File(filename + "_encrypted");
 		inKey = new File(filename + "_key");
@@ -276,32 +278,32 @@ public class Cryptography {
 		keyFileIn = new FileInputStream(inKey);
 		ivfilein = new FileInputStream(inIv);
 		out = new FileOutputStream(outfile);
-		
-		
+
+
 		bFile = new byte[(int) inFile.length()];
 		bKey = new byte[(int) inKey.length()];
 		bIv = new byte[16];
-		
+
 		keyFileIn.read(bKey);
-		in.read(bFile);		
+		in.read(bFile);
 		ivfilein.read(bIv);
-		
-		
+
+
 		IvParameterSpec ivspec = new IvParameterSpec(bIv);
-		
-		//Re-create the secret key: 
+
+		//Re-create the secret key:
 		SecretKey originalKey = new SecretKeySpec(bKey, 0, bKey.length, "AES");
 		// Resource: http://stackoverflow.com/questions/5355466/converting-secret-key-into-a-string-and-vice-versa
-		
+
 		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, originalKey, ivspec);// Where originalKey is the SecretKey obtained from the key file
-		
+
 		byte[] decrypted = cipher.doFinal(bFile);
-		
+
 		System.out.println(decrypted);
-		
+
 		out.write(decrypted);
-		
+
 		in.close();
 		keyFileIn.close();
 		out.flush();
