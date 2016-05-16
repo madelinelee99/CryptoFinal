@@ -138,9 +138,12 @@ public class EncryptTest {
 		return keygen.generateKey();
 	}
 	
+	//Download file method, takes in String filename
+	
 	private static void downloadFile(String filename){
 		try
 		{
+			//Assigns String storageConnectionString to have the container and the key of Clara's azure account
 			final String storageConnectionString = 
 					"DefaultEndpointsProtocol=http;" +
 							"AccountName=aitcryptography;" +
@@ -152,7 +155,7 @@ public class EncryptTest {
 		   // Create the blob client.
 		   CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
 
-		   // Retrieve reference to a previously created container.
+		   // Retrieve reference to container called aitcryptography on Clara's azure account.
 		   CloudBlobContainer container = blobClient.getContainerReference("aitcryptography");
 
 		   // Loop through each blob item in the container.
@@ -176,25 +179,25 @@ public class EncryptTest {
 		    e.printStackTrace();
 		}
 	}
+	
+	//Method to upload a file taking in String filename
 
 	private static void uploadFile(String filename) {
-
 		try
 		{
-
-			// Define the connection-string with your values
+			//Assigns String storageConnectionString to have the container and the key of Clara's azure account
 			final String storageConnectionString = 
 					"DefaultEndpointsProtocol=http;" +
 							"AccountName=aitcryptography;" +
 							"AccountKey=RCplSdfiuzxV8NRVktCCSuIMBf10fYKhTDnsm4Rf7RzTlJUhz5Xp4gVFYbg8+5xBJHkstruCplAcKXg6zaoLYg==";
 
-			// Retrieve storage account from connection-string.
+			// Retrieve storage account from connection-string by parsing the String.
 			CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
 
 			// Create the blob client.
 			CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
 
-			// Retrieve reference to a previously created container.
+			// Retrieve reference to container called aitcryptography on Clara's azure account.
 			CloudBlobContainer container = blobClient.getContainerReference("aitcryptography");
 			container.createIfNotExists();
 
@@ -202,7 +205,8 @@ public class EncryptTest {
 			final String filePath = System.getProperty("user.dir")+ "/" + filename;
 
 
-			// Create or overwrite the "myimage.jpg" blob with contents from a local file.
+			// Create or overwrite the "myimage.jpg" blob with contents from filename.
+			//Use FileInputStream to upload filePath to blob.
 			CloudBlockBlob blob = container.getBlockBlobReference(filename);
 			File source = new File(filePath);
 			blob.upload(new FileInputStream(source), source.length());
