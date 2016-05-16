@@ -81,22 +81,25 @@ public class Cryptography {
 
 					SecretKey key = makeKey();
 
-					keyfile.write(key.getEncoded());
-
+      					keyfile.write(key.getEncoded());
+                                        
+                                        //generate random IV
 					SecureRandom random = new SecureRandom();
-			    	byte[] bytes = new byte[16];
-			    	random.nextBytes(bytes);
+			    	        byte[] bytes = new byte[16];
+			        	random.nextBytes(bytes);
 
-			    	ivfile.write(bytes);
+			    	        ivfile.write(bytes);
 
 					IvParameterSpec ivspec = new IvParameterSpec(bytes);
 
+                                        //create cipher for encryption
 					Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 					cipher.init(Cipher.ENCRYPT_MODE, key, ivspec);
 
 					in.read(bFile);
 					in.close();
 
+                                        //encrypt and write to file
 					byte[] encrypted = cipher.doFinal(bFile);
 					out.write(encrypted);
 
