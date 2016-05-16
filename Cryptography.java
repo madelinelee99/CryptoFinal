@@ -48,7 +48,6 @@ public class Cryptography {
                 uploadInfo = input.nextLine().toUpperCase();
 		System.out.println("Enter file name: ");
 		userFile = input.nextLine();
-		System.out.println(userFile);
 		input.close();
 	}
 
@@ -133,6 +132,7 @@ public class Cryptography {
 					}
 				}
 				uploadFile(inputFile + "_encrypted");
+				System.out.println("Successfully uploaded and encrypted: " + inputFile);
 			}
 
 		} else if (uploadInfo.equals(DOWNLOAD)) {
@@ -156,6 +156,7 @@ public class Cryptography {
 				} catch (InvalidAlgorithmParameterException e) {
 					e.printStackTrace();
 				}
+				System.out.println("Successfully downloaded and decrypted: " + inputFile);
 			}
 		} else {
 			System.out.println("Incorrect upload/download input. Exiting...");
@@ -297,8 +298,6 @@ public class Cryptography {
 		cipher.init(Cipher.DECRYPT_MODE, originalKey, ivspec);// Where originalKey is the SecretKey obtained from the key file
 		
 		byte[] decrypted = cipher.doFinal(bFile);
-		
-		System.out.println(decrypted);
 		
 		out.write(decrypted);
 		
