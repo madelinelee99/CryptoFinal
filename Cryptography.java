@@ -16,8 +16,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Scanner;
 
@@ -27,6 +29,9 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
 
 public class Cryptography {
 
@@ -54,19 +59,15 @@ public class Cryptography {
 	public static void main(String[] args) throws IOException {
 
 
-		Cryptography test = new Cryptography(args);
-
-//		System.out.println("hey");
-                
-                
-//              System.out.println(System.getProperty("user.dir"));
-          
+		Cryptography test = new Cryptography(args);          
         
 		FileInputStream in = null;
 		File inFile;
+		File outfile;
 		byte[] bFile;
 		FileOutputStream out = null;
 		FileOutputStream keyfile = null;
+		FileOutputStream ivfile = null;
 		String[] inputFiles = userFile.split(" ");
 
 		if (uploadInfo.equals(UPLOAD)) {
@@ -74,21 +75,28 @@ public class Cryptography {
 			for(String inputFile : inputFiles){
 
 				try {
-					in = new FileInputStream(inputFile);
-					out = new FileOutputStream(inputFile+"_encrypted");
 					inFile = new File(inputFile);
+					outfile = new File(inputFile+"_encrypted");
+					in = new FileInputStream(inFile);
+					out = new FileOutputStream(outfile);
 					bFile = new byte[(int) inFile.length()];
 					keyfile = new FileOutputStream(inputFile+"_key");
+					ivfile = new FileOutputStream(inputFile+"_iv");
 
 					SecretKey key = makeKey();
-					//byte[] keystring = Base64.getEncoder().encode(key.getEncoded());
-							//encodeToString(key.getEncoded());
 
-					//System.out.println(keystring);
 					keyfile.write(key.getEncoded());
 
+					SecureRandom random = new SecureRandom();
+			    	byte[] bytes = new byte[16];
+			    	random.nextBytes(bytes);
+			    
+			    	ivfile.write(bytes);
+				
+					IvParameterSpec ivspec = new IvParameterSpec(bytes);
+
 					Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-					cipher.init(Cipher.ENCRYPT_MODE, key);
+					cipher.init(Cipher.ENCRYPT_MODE, key, ivspec);
 
 					in.read(bFile);
 					in.close();
@@ -108,23 +116,27 @@ public class Cryptography {
 					e.printStackTrace();
 				} catch (BadPaddingException e) {
 					e.printStackTrace();
-				}
-	//                                catch (FileNotFoundException e) {
-	//                            e.printStackTrace();
-	//                        }
+				} catch (InvalidAlgorithmParameterException e) {
+					e.printStackTrace();
+				} 
 				finally {
 					if (in != null) {
 						in.close();
 					}
 					if (out != null) {
+						out.flush();
 						out.close();
 					}
 					if (keyfile != null) {
+						keyfile.flush();
 						keyfile.close();
+					}
+					if (ivfile != null) {
+						ivfile.flush();
+						ivfile.close();
 					}
 				}
 				uploadFile(inputFile + "_encrypted");
-				//downloadFile(inputFile + "_encrypted");
 			}
 
 		} else if (uploadInfo.equals(DOWNLOAD)) {
@@ -154,10 +166,6 @@ public class Cryptography {
 	private static void downloadFile(String filename){
 		try
 		{
-			// final String storageConnectionString = 
-			// 		"DefaultEndpointsProtocol=http;" +
-			// 				"AccountName=aitcryptography;" +
-			// 				"AccountKey=RCplSdfiuzxV8NRVktCCSuIMBf10fYKhTDnsm4Rf7RzTlJUhz5Xp4gVFYbg8+5xBJHkstruCplAcKXg6zaoLYg==";
 
 		    // Retrieve storage account from connection-string.
 		   CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
@@ -195,12 +203,6 @@ public class Cryptography {
 		try
 		{
 
-			// Define the connection-string with your values
-			// final String storageConnectionString = 
-			// 		"DefaultEndpointsProtocol=http;" +
-			// 				"AccountName=aitcryptography;" +
-			// 				"AccountKey=RCplSdfiuzxV8NRVktCCSuIMBf10fYKhTDnsm4Rf7RzTlJUhz5Xp4gVFYbg8+5xBJHkstruCplAcKXg6zaoLYg==";
-
 			// Retrieve storage account from connection-string.
 			CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
 
@@ -229,50 +231,69 @@ public class Cryptography {
 
 	}
 
-	private static void decrypt(String filename) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+	private static void decrypt(String filename) throws IOException, 
+	NoSuchAlgorithmException, NoSuchPaddingException, 
+	InvalidKeyException, IllegalBlockSizeException, 
+	BadPaddingException, InvalidAlgorithmParameterException {
 		// Input streams for the encrypted file and key
 		FileInputStream in = null;
 		FileInputStream keyFileIn = null;
+		FileInputStream ivfilein = null;
 		
 		// Destination file for encrypted file and key
 		File inFile;
 		File inKey;
+		File inIv;
+		File outfile;
 		
 		// bFile to hold bytes for encrypted file
 		byte[] bFile;
 		byte[] bKey;
+		byte[] bIv;
 		
 		// Output stream to stream the decrypted file into a file
 		FileOutputStream out = null;
 		
 		// Initialize
-		in = new FileInputStream(filename + "_encrypted");
-		keyFileIn = new FileInputStream(filname + "_key");
-		out = new FileOutputStream(filename + "_decrypted");
-		inFile = new File(filename + "_encrpyted");
+		inFile = new File(filename + "_encrypted");
 		inKey = new File(filename + "_key");
+		inIv = new File(filename + "_iv");
+		outfile = new File(filename + "_decrypted");
+		in = new FileInputStream(inFile);
+		keyFileIn = new FileInputStream(inKey);
+		ivfilein = new FileInputStream(inIv);
+		out = new FileOutputStream(outfile);
+		
+		
 		bFile = new byte[(int) inFile.length()];
 		bKey = new byte[(int) inKey.length()];
+		bIv = new byte[16];
 		
 		keyFileIn.read(bKey);
-		in.read(Base64.getDecoder().decode(bFile));		
+		in.read(bFile);		
+		ivfilein.read(bIv);
 		
-		// Get the Base64 encoded key string: 
-		//byte[] decodedKey = Base64.getDecoder().decode(bKey);
-		// Re-create the secret key: 
-		SecretKeySpec originalKey = new SecretKeySpec(bKey, 0, bKey.length, "AES/CBC/PKCS5Padding");
+		
+		IvParameterSpec ivspec = new IvParameterSpec(bIv);
+		
+		//Re-create the secret key: 
+		SecretKey originalKey = new SecretKeySpec(bKey, 0, bKey.length, "AES");
 		// Resource: http://stackoverflow.com/questions/5355466/converting-secret-key-into-a-string-and-vice-versa
 		
 		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-		cipher.init(Cipher.DECRYPT_MODE, originalKey);// Where originalKey is the SecretKey obtained from the key file
+		cipher.init(Cipher.DECRYPT_MODE, originalKey, ivspec);// Where originalKey is the SecretKey obtained from the key file
 		
 		byte[] decrypted = cipher.doFinal(bFile);
+		
+		System.out.println(decrypted);
 		
 		out.write(decrypted);
 		
 		in.close();
 		keyFileIn.close();
+		out.flush();
 		out.close();
+		ivfilein.close();
 
 	}
 
