@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 /**
  *
- * @author clarabelitz
+ * @author Claire Illich, Annaliese Johnson, Maddy Lee, Clara Belitz
+ * May 2016
  */
 
 import com.microsoft.azure.storage.*;
@@ -102,7 +98,7 @@ public class Cryptography {
 					in.close();
 
 					byte[] encrypted = cipher.doFinal(bFile);
-					out.write(Base64.getEncoder().encode(encrypted));
+					out.write(encrypted);
 
 
 
@@ -142,7 +138,24 @@ public class Cryptography {
 		} else if (uploadInfo.equals(DOWNLOAD)) {
 			for(String inputFile : inputFiles){
 				downloadFile(inputFile + "_encrypted");	
-				decrypt(inputFile);
+				//System.out.println(inputFile);
+				try {
+					decrypt(inputFile);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					e.printStackTrace();
+				} catch (NoSuchPaddingException e) {
+					e.printStackTrace();
+				} catch (InvalidKeyException e) {
+					e.printStackTrace();
+				} catch (IllegalBlockSizeException e) {
+					e.printStackTrace();
+				} catch (BadPaddingException e) {
+					e.printStackTrace();
+				} catch (InvalidAlgorithmParameterException e) {
+					e.printStackTrace();
+				}
 			}
 		} else {
 			System.out.println("Incorrect upload/download input. Exiting...");
