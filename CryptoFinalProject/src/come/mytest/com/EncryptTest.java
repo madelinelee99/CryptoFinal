@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Scanner;
 
@@ -17,6 +19,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 
 public class EncryptTest {
 
@@ -41,19 +44,23 @@ public class EncryptTest {
 
 		FileInputStream in = null;
 		File inFile;
+		File outfile;
 		byte[] bFile;
 		FileOutputStream out = null;
 		FileOutputStream keyfile = null;
+		FileOutputStream ivfile = null;
 		String[] inputFiles = userFile.split(" ");
 		
 		for(String inputFile : inputFiles){
 
 			try {
-				in = new FileInputStream(inputFile);
-				out = new FileOutputStream(inputFile+"_encrypted");
 				inFile = new File(inputFile);
+				outfile = new File(inputFile+"_encrypted");
+				in = new FileInputStream(inFile);
+				out = new FileOutputStream(outfile);
 				bFile = new byte[(int) inFile.length()];
 				keyfile = new FileOutputStream(inputFile+"_key");
+				ivfile = new FileOutputStream(inputFile+"_iv");
 
 				SecretKey key = makeKey();
 				//byte[] keystring = Base64.getEncoder().encode(key.getEncoded());
@@ -61,15 +68,23 @@ public class EncryptTest {
 
 				//System.out.println(keystring);
 				keyfile.write(key.getEncoded());
+				
+				SecureRandom random = new SecureRandom();
+			    byte[] bytes = new byte[16];
+			    random.nextBytes(bytes);
+			    
+			    ivfile.write(bytes);
+				
+				IvParameterSpec ivspec = new IvParameterSpec(bytes);
 
 				Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-				cipher.init(Cipher.ENCRYPT_MODE, key);
+				cipher.init(Cipher.ENCRYPT_MODE, key, ivspec);
 
 				in.read(bFile);
 				in.close();
 
 				byte[] encrypted = cipher.doFinal(bFile);
-				out.write(Base64.getEncoder().encode(encrypted));
+				out.write(encrypted);
 
 
 
@@ -83,20 +98,28 @@ public class EncryptTest {
 				e.printStackTrace();
 			} catch (BadPaddingException e) {
 				e.printStackTrace();
+			} catch (InvalidAlgorithmParameterException e) {
+				e.printStackTrace();
 			} 
 			finally {
 				if (in != null) {
 					in.close();
 				}
 				if (out != null) {
+					out.flush();
 					out.close();
 				}
 				if (keyfile != null) {
+					keyfile.flush();
 					keyfile.close();
+				}
+				if (ivfile != null) {
+					ivfile.flush();
+					ivfile.close();
 				}
 			}
 			//uploadFile(inputFile + "_encrypted");
-			downloadFile(inputFile + "_encrypted");
+			//downloadFile(inputFile + "_encrypted");
 
 		}
 
